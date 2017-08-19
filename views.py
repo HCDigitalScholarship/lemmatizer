@@ -1,18 +1,40 @@
-from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import UploadFileForm
+from django.template import Context, loader, RequestContext
+from django.shortcuts import get_object_or_404, render, redirect
 from utils import handle_uploaded_file
+from lemmatizer.forms import PostText
+
 
 
 def lemmatizer(request):
 	return render(request,'lemmatizer.html')
+
+def output_page(request):
+    return render(request,'lemmatized.html')
+#def lemmatize(request):
+#	return render(request,'lemmatize.html')
+	#return render_to_response('fileupload/upload.html', {'form': c['UploadFileForm']},  RequestContext(request))
+
  
-def upload_file(request):
+def lemmatize_text(request):
+    if request.method == 'POST':
+        form = PostText(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect(index)
+        else:
+            print(form.errors)
+    else:
+        form = PostForm()
+    return render(request, 'lemmatized.html', {'form': form})
+
+def lemmatize_file(request):
     if request.method == 'POST':
         form = UploadFileForm(request.POST, request.FILES)
         if form.is_valid():
             handle_uploaded_file(request.FILES['file'])
-            return HttpResponseRedirect('/success/url/')
+            return HttpResponseRedirect('lemmatize.html')
     else:
         form = UploadFileForm()
-    return render(request, 'upload.html', {'form': form})
+    return render(request, 'lemmatize.html', {'form': form})
+
