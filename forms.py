@@ -1,5 +1,5 @@
 from django import forms
-from lemmatizer.models import lem_model
+from lemmatizer.models import lemmmatizer
 
 class UploadFileForm(forms.Form):
     title = forms.CharField(max_length=50)
@@ -7,6 +7,6 @@ class UploadFileForm(forms.Form):
 
 class PostText(forms.ModelForm):
 	class Meta:
-		model = lem_model
-		fields = ['title', 'content']
+		model = lemmmatizer
+		fields = ['content']
 

@@ -21,7 +21,7 @@ def lemmatize_text(request):
         form = PostText(request.POST, request.FILES)
         if form.is_valid():
             form.save(commit=True)
-            return redirect(index)
+            return render(request, 'lemmatized.html')
         else:
             print(form.errors)
     else:
