@@ -29,7 +29,7 @@ from mimetypes import guess_type
 from collections import defaultdict, namedtuple
 from itertools import islice
 
-import utils.excel as excel
+import excel as excel
 from autoLemma import OUTPUT_COLUMNS as INPUT_COLUMNS
 
 # https://github.com/docopt/docopt
