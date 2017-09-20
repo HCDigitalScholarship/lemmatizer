@@ -66,6 +66,7 @@ FORMULAE_COLUMNS = [
     "DISPLAY LEMMA", "SHORTDEF", "LONGDEF", "LOCALDEF", "NEW"
 ]
 
+
 OUTPUT_COLUMNS = [
     Column("TITLE", 1, 
            lambda lemma, __: lemma.display),
@@ -104,7 +105,7 @@ def lemmataFromLemmatizedWorkbook(workbook, *, include_duplicates=True):
     
     lemmata_col = excel.getColumnByName(INPUT_COLUMNS, "TITLE")
     location_col = excel.getColumnByName(INPUT_COLUMNS, "LOCATION")
-    section_col = excel.getColumnByName(INPUT_COLUMNS, "SECTION")
+    section_col = excel.getColumnByName(INPUT_COLUMNS, "LOCATION")
     
     def isValidWorksheet(worksheet, verbose=True):
         headers = next(worksheet.rows)

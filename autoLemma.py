@@ -57,7 +57,7 @@ from warnings import warn
 from string import digits
 import codecs
 
-import excel as excel
+import excel 
 
 # https://pypi.python.org/pypi/regex
 # this is to recognize accented Greek characters as alphabetic
@@ -130,7 +130,7 @@ OUTPUT_COLUMNS = [
     Column("LOCATION", 4, 
            lambda word, __: word.location),
     Column("SECTION", 5, 
-           lambda word, __: sectionFromWord(word)),
+           lambda word, __: word.location),
     Column("RUNNING COUNT", 6,
            lambda __, row: str(row)),
     Column("DISPLAY LEMMA", 7,
