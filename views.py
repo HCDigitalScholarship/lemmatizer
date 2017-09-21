@@ -22,9 +22,14 @@ def lemmatizer(request):
         form = PostText(request.POST, request.FILES)
         
         if form.is_valid():
-
+            language = form['language'].value()
+            filename = form['file'].value()
+            lem_format = form['lem_format'].value() 
+            #lem_format = form.lem_format.value
             
-            form.save(commit=True)
+            #lemmatize(language,filename,format):
+            easy_lem.lemmatize(language,filename,lem_format)
+            #form.save(commit=True)
 
             '''Here is where we call easy_lem.lemmatize()'''
 
