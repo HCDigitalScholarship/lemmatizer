@@ -2,12 +2,13 @@
 
 {% csrf_token %}
 <title>The Bridge: Lemmatizer</title>
-<body id="body" data-title="index" class = "home blog">
+<body id="body" data-title="index" class = "home">
 	{% include "navbar.html" %}
 	{% include "about.html" %}
 <div id="background" class = "custom-background img-responsive">
   <div class="page-wrap">
-
+<!--{% debug %}-->
+<p> {{form.text.value}} </p>
 
 <font color="white"><h1> You've been Lematized! </h1></font>
 

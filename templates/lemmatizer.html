@@ -4,21 +4,52 @@
 <html>
 <head>
 </head -->
+
+<style>
+#PostText {
+	min-width:200px;
+	max-width:350px;
+	margin:auto;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+
+
+#PostBlock {
+	background:rgba(255,255,255,0.85);
+	padding:5px;
+	margin: 5px;
+	border-radius: 2.5px;
+}
+
+
+
+</style>
+
+
 <title>The Bridge: Lemmatizer</title>
-<body id="body" data-title="index" class = "home blog">
+<body id="body" data-title="index" class = "home">
 	{% include "navbar.html" %}
 	{% include "about.html" %}
+
 <div id="background" class = "custom-background img-responsive">
   <div class="page-wrap">
-  <form id="PostText" method="POST" action="/lemmatized" enctype="multipart/form-data">
-  	{% csrf_token %}
-  	<input type="file" name="title" id="title">
-	<input type="text" name="content" id="content" size=200>
+	<div style="
+    padding-left: 15px;
+    padding-right: 15px;">  
+		<h1 id="PostBlock" style="display:inline-block;"> Bridge Tools </h1>
+			<br>
+			<p id="PostBlock"> With these tools you can create a spreadsheet with a lemmatized text, specify whether you want to lemmatize all forms or only unambiguous forms, and specify the lemmata system for the spreadsheet</p>
+			
+			<form id="post_text" style="display:inline-block;" method="post" action="Lemmatizer" enctype="multipart/form-data">
+      		{% csrf_token %}
+      		<div id="PostBlock" style="text-align:center;">
+      		{{ form }}
+      		<input type="submit" name="submit" value="Submit"> </div>
+ 		</form>
+  	</div>
 
-    <input type="submit" name="submit" value="Submit"> </form> 
-
- 
-  
 
  </div>
 </div>
