@@ -8,10 +8,15 @@
 <div id="background" class = "custom-background img-responsive">
   <div class="page-wrap">
 <!--{% debug %}-->
-<p> {{form.text.value}} </p>
+<font color="white"><p> Text: {{form.text.value}} </p>
+<font color="white"><p> Filename: {{form.file.value}} </p>
+<font color="white"><p> Format: {{form.lem_format.value}} </p>
+<font color="white"><p> Language: {{form.language.value}} </p>
 
-<font color="white"><h1> You've been Lematized! </h1></font>
 
 </div>
 </div>
+
+ 
+
 {% include "footer.html" %}
