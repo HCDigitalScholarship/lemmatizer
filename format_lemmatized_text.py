@@ -211,7 +211,7 @@ if __name__ == '__main__':
                                         lambda __, row: '')
         
     excel.saveDataToSpreadsheet(
-        lemmata, OUTPUT_COLUMNS, output_name, path=path_prefix, 
+        lemmata, OUTPUT_COLUMNS, output_name, path='/tmp', 
         append=args['--append'], sheet_title=args['--output-sheet'], 
         echo=args['--echo']
     )

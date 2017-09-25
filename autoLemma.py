@@ -540,7 +540,7 @@ def autoLemma(args, *, lemmatizer=None, wordsFromPathList=wordsFromPathList):
         )
     else:
         excel.saveDataToSpreadsheet(
-            words, columns, text_name, path=path_prefix, echo=args['--echo'], 
+            words, columns, text_name, path='/tmp', echo=args['--echo'], 
             append=args['--append'], sheet_title=args['--output-sheet'],
         )
 

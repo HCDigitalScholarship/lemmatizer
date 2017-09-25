@@ -13,9 +13,9 @@ class lemmmatizer(models.Model):
 	
 	created_at = models.DateTimeField(auto_now_add=True)
 
-	file = models.FileField(blank=True, storage=FileSystemStorage(location='/tmp'))
+	file = models.FileField(blank=True, storage=FileSystemStorage(location='/tmp/lematizer_temp_file.txt'))
 	
-	text = models.TextField(default='')
+	text = models.TextField(default='', blank=True)
 
 	ALL = 'all'
 	ONLY_UN = 'oun'

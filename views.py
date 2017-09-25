@@ -1,9 +1,12 @@
+import os
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, loader, RequestContext
 from django.shortcuts import get_object_or_404, render, redirect
+from django.core.files.base import ContentFile
 from utils import handle_uploaded_file
 from lemmatizer.forms import PostText, post_text
 from lemmatizer import easy_lem
+import tempfile
 
 #def lemmatizer(request):
 #	return render(request,'lemmatizer.html')
@@ -14,7 +17,6 @@ from lemmatizer import easy_lem
 #def lemmatize(request):
 #	return render(request,'lemmatize.html')
 	#return render_to_response('fileupload/upload.html', {'form': c['UploadFileForm']},  RequestContext(request))
-
  
 def lemmatizer(request):
     
@@ -22,16 +24,33 @@ def lemmatizer(request):
         form = PostText(request.POST, request.FILES)
         
         if form.is_valid():
-            language = form['language'].value()
-            filename = form['file'].value()
-            lem_format = form['lem_format'].value() 
-            #lem_format = form.lem_format.value
             
-            #lemmatize(language,filename,format):
-            easy_lem.lemmatize(language,filename,lem_format)
-            #form.save(commit=True)
+            #class is InMemoryUploadedFile
+            with tempfile.NamedTemporaryFile(suffix='.txt', dir='/tmp/', delete=True) as f:
+                
+                #write the uploaded file to a temporary file on the server in /tmp
+                f.write(form['file'].value().read())
 
-            '''Here is where we call easy_lem.lemmatize()'''
+                #TODO: Handle data from textfield
+                #f.write(form['text'].value().read())
+                #with .read() gives'unicode' object has no attribute 'read'
+                #without gives 'ascii' codec can't encode character u'\u2014' in position 182: ordinal not in range(128)
+
+
+                #language, filename and format variables from form to pass to easy_lem
+                language = str(form['language'].value())
+
+                filename = f.name
+
+                lem_format = str(form['lem_format'].value()) 
+            
+                #pass variables to lemmatize function and Bret's scripts
+                print (language,filename,lem_format)
+                easy_lem.lemmatize(language,filename,lem_format)
+
+                #uncomment to save form data to db
+                #form.save(commit=True)
+
 
             return render(request, 'lemmatized.html',{'form':form})#,{'test'='hi1'})
         else:
