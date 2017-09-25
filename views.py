@@ -54,17 +54,13 @@ def lemmatizer(request):
                 #form.save(commit=True)
 
                 #Here we send the output file to lemmatized.html (tmpEDoVlX_Input.xlsx)
-                output_file = str(f.name).split('.')[0] + '_Input.xlsx'
-                output_file = output_file.split('/')[2]
+                if lem_format == 'bridge':
+                    output_file = str(f.name).split('.')[0] + '_Input.xlsx'
+                    output_file = output_file.split('/')[2]
 
-                #with open(output_file, 'rb') as of:
-                #    out_file = HttpResponse(of, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') # mimetype is replaced by content_type for django 1.7
-                    
-                    #out_file['Content-Disposition'] = 'attachment; filename=%s' % smart_str(output_file)
-                    #out_file['X-Sendfile'] = smart_str(output_file)
-
-                #with open(output_file, 'rb') as of:
-                #    out_file = HttpResponse(of.read(), content_type="application/force-download") 
+                elif lem_format == 'morpheus':
+                    output_file = str(f.name).split('.')[0] + '.xlsx'
+                    output_file = output_file.split('/')[2]
 
 
             return render(request, 'lemmatized.html',{'form':form, 'output_file':output_file})#,{'test'='hi1'})
