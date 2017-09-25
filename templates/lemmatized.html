@@ -8,11 +8,10 @@
 <div id="background" class = "custom-background img-responsive">
   <div class="page-wrap">
 <!--{% debug %}-->
-<font color="white"><p> Text: {{form.text.value}} </p>
 <font color="white"><p> Filename: {{form.file.value}} </p>
 <font color="white"><p> Format: {{form.lem_format.value}} </p>
 <font color="white"><p> Language: {{form.language.value}} </p>
-
+<a href="/download/{{output_file}}" download>Download Lemmatized File</a>
 
 </div>
 </div>

@@ -7,6 +7,8 @@ from utils import handle_uploaded_file
 from lemmatizer.forms import PostText, post_text
 from lemmatizer import easy_lem
 import tempfile
+from django.utils.encoding import smart_str
+
 
 #def lemmatizer(request):
 #	return render(request,'lemmatizer.html')
@@ -51,8 +53,21 @@ def lemmatizer(request):
                 #uncomment to save form data to db
                 #form.save(commit=True)
 
+                #Here we send the output file to lemmatized.html (tmpEDoVlX_Input.xlsx)
+                output_file = str(f.name).split('.')[0] + '_Input.xlsx'
+                output_file = output_file.split('/')[2]
 
-            return render(request, 'lemmatized.html',{'form':form})#,{'test'='hi1'})
+                #with open(output_file, 'rb') as of:
+                #    out_file = HttpResponse(of, content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') # mimetype is replaced by content_type for django 1.7
+                    
+                    #out_file['Content-Disposition'] = 'attachment; filename=%s' % smart_str(output_file)
+                    #out_file['X-Sendfile'] = smart_str(output_file)
+
+                #with open(output_file, 'rb') as of:
+                #    out_file = HttpResponse(of.read(), content_type="application/force-download") 
+
+
+            return render(request, 'lemmatized.html',{'form':form, 'output_file':output_file})#,{'test'='hi1'})
         else:
             print(form.errors)
     else:
