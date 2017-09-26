@@ -28,6 +28,12 @@ class lemmmatizer(models.Model):
 	FORMAT_CHOICES = ((BRIDGE, 'Bridge'), (MORPHEUS, 'Morpheus'))
 
 	lem_format = models.CharField(max_length = 8, choices=FORMAT_CHOICES, default=BRIDGE)
+
+	CSV = 'csv'
+	EXCEL = 'Excel'
+	FORMAT_CHOICES = ((CSV, 'csv'), (EXCEL, 'Excel'))
+
+	out_format = models.CharField(max_length = 5, choices=FORMAT_CHOICES, default=CSV)
     
 
 

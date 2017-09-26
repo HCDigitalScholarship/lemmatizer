@@ -25,5 +25,7 @@ class post_text(forms.Form):
 class PostText(forms.ModelForm):
 	class Meta:
 		model = lemmmatizer
-		fields = ['file','language','lem_level','lem_format']
-
+		fields = ['file','language','out_format','lem_format']
+        labels = {
+            'file': None
+        }

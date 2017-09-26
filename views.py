@@ -1,4 +1,6 @@
 import os
+import xlrd
+import csv
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import Context, loader, RequestContext
 from django.shortcuts import get_object_or_404, render, redirect
@@ -45,23 +47,57 @@ def lemmatizer(request):
                 filename = f.name
 
                 lem_format = str(form['lem_format'].value()) 
-            
+                out_format = str(form['out_format'].value()) 
+
                 #pass variables to lemmatize function and Bret's scripts
                 print (language,filename,lem_format)
                 easy_lem.lemmatize(language,filename,lem_format)
 
                 #uncomment to save form data to db
                 #form.save(commit=True)
-
+                if out_format == 'Excel':
                 #Here we send the output file to lemmatized.html (tmpEDoVlX_Input.xlsx)
-                if lem_format == 'bridge':
-                    output_file = str(f.name).split('.')[0] + '_Input.xlsx'
-                    output_file = output_file.split('/')[2]
+                    if lem_format == 'bridge':
+                        output_file = str(f.name).split('.')[0] + '_Input.xlsx'
+                        output_file = output_file.split('/')[2]
 
-                elif lem_format == 'morpheus':
-                    output_file = str(f.name).split('.')[0] + '.xlsx'
-                    output_file = output_file.split('/')[2]
+                    elif lem_format == 'morpheus':
+                        output_file = str(f.name).split('.')[0] + '.xlsx'
+                        output_file = output_file.split('/')[2]
 
+                if out_format == 'csv':
+                    if lem_format == 'bridge':
+                        output_file = str(f.name).split('.')[0] + '_Input.xlsx'
+                        wb = xlrd.open_workbook(output_file)
+                        sheet_names = wb.sheet_names()
+                        sh = wb.sheet_by_name(sheet_names[0])
+                        your_csv_file = open('/tmp/lemmatized.csv', 'w')
+                        wr = csv.writer(your_csv_file, quoting=csv.QUOTE_ALL)
+                        
+                        for rownum in range(sh.nrows):
+                            try:
+                                wr.writerow(sh.row_values(rownum))
+                            except:
+                                pass
+                        your_csv_file.close()
+                        output_file = 'lemmatized.csv'
+
+
+                    elif lem_format == 'morpheus':
+                        output_file = str(f.name).split('.')[0] + '.xlsx'
+                        wb = xlrd.open_workbook(output_file)
+                        sheet_names = wb.sheet_names()
+                        sh = wb.sheet_by_name(sheet_names[0])
+                        your_csv_file = open('/tmp/lemmatized.csv', 'w')
+                        wr = csv.writer(your_csv_file, quoting=csv.QUOTE_ALL)
+                        
+                        for rownum in range(sh.nrows):
+                            try:
+                                wr.writerow(sh.row_values(rownum))
+                            except:
+                                pass
+                        your_csv_file.close()
+                        output_file = 'lemmatized.csv'
 
             return render(request, 'lemmatized.html',{'form':form, 'output_file':output_file})#,{'test'='hi1'})
         else:
