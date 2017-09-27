@@ -1,3 +1,9 @@
+# encoding=utf8  
+import sys  
+
+reload(sys)  
+sys.setdefaultencoding('utf8')
+
 import os
 import xlrd
 import csv
@@ -29,14 +35,13 @@ def lemmatizer(request):
         
         if form.is_valid():
             
-            #class is InMemoryUploadedFile
-            with tempfile.NamedTemporaryFile(suffix='.txt', dir='/tmp/', delete=True) as f:
+            #write the uploaded file to a temporary file on the server in /tmp
+            with tempfile.NamedTemporaryFile(suffix='.txt', dir='/tmp/', delete=False) as f:
                 
-                #write the uploaded file to a temporary file on the server in /tmp
-                f.write(form['file'].value().read())
-
+                f.write(form['file'].value().read())#.encode("utf-8"))
+                f.close
                 #TODO: Handle data from textfield
-                #f.write(form['text'].value().read())
+                #f.write(form['text'].value().encode("utf-8"))
                 #with .read() gives'unicode' object has no attribute 'read'
                 #without gives 'ascii' codec can't encode character u'\u2014' in position 182: ordinal not in range(128)
 
@@ -45,7 +50,11 @@ def lemmatizer(request):
                 language = str(form['language'].value())
 
                 filename = f.name
+                f.close()
+            #I'm not sure why we need this, but autoLemma will read the temporary file but not find any lemmas unless we save it and reopen it. 
+            with open(filename) as f:
 
+                f.read()
                 lem_format = str(form['lem_format'].value()) 
                 out_format = str(form['out_format'].value()) 
 
@@ -55,6 +64,7 @@ def lemmatizer(request):
 
                 #uncomment to save form data to db
                 #form.save(commit=True)
+
                 if out_format == 'Excel':
                 #Here we send the output file to lemmatized.html (tmpEDoVlX_Input.xlsx)
                     if lem_format == 'bridge':
@@ -98,6 +108,9 @@ def lemmatizer(request):
                                 pass
                         your_csv_file.close()
                         output_file = 'lemmatized.csv'
+                #Remove the tempary txt file, but keep the csv and xlsx output        
+                os.unlink(filename)
+                assert not os.path.exists(filename)
 
             return render(request, 'lemmatized.html',{'form':form, 'output_file':output_file})#,{'test'='hi1'})
         else:
