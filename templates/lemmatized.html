@@ -1,5 +1,10 @@
 {% include "head.html" %}
 
+
+
+
+
+
 {% csrf_token %}
 <title>The Bridge: Lemmatizer</title>
 <body id="body" data-title="index" class = "home">
@@ -8,12 +13,17 @@
 <div id="background" class = "custom-background img-responsive">
   <div class="page-wrap">
 <!--{% debug %}-->
+<div style="text-align:center;padding-top:30px;">
+
 <font color="white"><p> Filename: {{form.file.value}} </p>
 <font color="white"><p> Format: {{form.lem_format.value}} </p>
 <font color="white"><p> Language: {{form.language.value}} </p>
-<button><a href="/download/{{output_file}}" download>Download Lemmatized File</a></button>
 
-<button><a href="/lemmatizer">Lemmatize Another</a></button>
+<a class="btn btn-primary" style="margin:10px;" role="button" href="/download/{{output_file}}" download>Download Lemmatized File <span class="glyphicon glyphicon-save" aria-hidden="true"></span></a>
+
+<a class="btn btn-primary" style="margin:10px;" role="button" href="/lemmatizer">Lemmatize Another</a>
+</div>
+
 </div>
 </div>
 
