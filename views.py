@@ -16,24 +16,56 @@ from lemmatizer.forms import PostText, post_text
 from lemmatizer import easy_lem
 import tempfile
 from django.utils.encoding import smart_str
+import random 
 
+#these three functions are part of the captcha that asks a simple math question using Roman numerals.
+def roman_solution(value):
+    try:
+        solution = int(input(question))
+        if type(solution) == type(1) and answer  == solution:
+            correct = True
+        else:
+            correct = False
+    except:
+            correct = False
 
-#def lemmatizer(request):
-#	return render(request,'lemmatizer.html')
+def RomToReg(numeral):
+    romanNum = ['0','I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI','XVII','XVIII', "XIX", "XX"]
+    for i in range(0, len(romanNum)):
+            if numeral == romanNum[i]:
+                return i+1
 
-#def lemmatized(request):
-#    test = "came from func output_page...interesting"
-#    return render(request,'lemmatized.html', test='hi')
-#def lemmatize(request):
-#	return render(request,'lemmatize.html')
-	#return render_to_response('fileupload/upload.html', {'form': c['UploadFileForm']},  RequestContext(request))
- 
+def parseEquation(strInput):
+    while " " in strInput:
+        strInput = strInput.replace(" ", "")
+    question  = strInput.split("=")[0]
+    answer = strInput.split("=")[1]
+    if "-" in question:
+        first = question.split("-")[0]
+        second = question.split("-")[1]
+        correctAns = RomToReg(first) - RomToReg(second)
+    if "+" in question:
+        first = question.split("+")[0]
+        second = question.split("+")[1]
+        correctAns = RomToReg(first) + RomToReg(second)
+    givenAns = RomToReg(answer)
+    print first, second, answer, givenAns, correctAns
+    return givenAns == correctAns
+    
+    #print(givenAns)   
+
+#this is the main view for the lemmatizer
 def lemmatizer(request):
+
     
     if request.method == 'POST':
         form = PostText(request.POST, request.FILES)
+        captcha = str(form['question'].value())
+        answer = parseEquation(captcha)
         
-        if form.is_valid():
+        print(answer)
+
+        if form.is_valid() and answer != False:
             
             #write the uploaded file to a temporary file on the server in /tmp
             with tempfile.NamedTemporaryFile(suffix='.txt', dir='/tmp/', delete=False) as f:
@@ -119,15 +151,15 @@ def lemmatizer(request):
         form = PostText()
     return render(request, 'lemmatizer.html',{'form':form}) # {'form': form, 'test':'hi2'})
 
-def lemmatize_file(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            handle_uploaded_file(request.FILES['file'])
-            return HttpResponseRedirect('lemmatize.html')
-    else:
-        form = UploadFileForm()
+#def lemmatize_file(request):
+#    if request.method == 'POST':
+#        form = UploadFileForm(request.POST, request.FILES)
+#        if form.is_valid():
+#            handle_uploaded_file(request.FILES['file'])
+##            return HttpResponseRedirect('lemmatize.html')
+ #   else:
+ #       form = UploadFileForm()
 
-    return render(request, 'lemmatized.html', {'form': form,test:'hi4'})
-    return render(request, 'lemmatize.html', {'form': form})
+  #  return render(request, 'lemmatized.html', {'form': form,test:'hi4'})
+ #   return render(request, 'lemmatize.html', {'form': form})
 

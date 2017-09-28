@@ -1,8 +1,25 @@
 from django.db import models
 from django.core.files.storage import FileSystemStorage
+import random
 
+def romanMath():
+    correct = False
+    while (correct == False):
+        romanNum = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+        length = len(romanNum)
+        a = random.randint(1, length)
+        b = random.randint(1, length)
+        operation = random.randint(1, 2)
+        if operation == 1: 
+            question = romanNum[a - 1] + " + " + romanNum[b- 1]+ " = "
+            answer = a + b
+        elif operation == 2: 
+            question = romanNum[max(a, b) -1] + " - " + romanNum[min(a, b)- 1]+ " = "
+            answer = max(a, b) - min(a, b)
+        return question 
+        #print "Please solve the roman numeral math problem below, and give your answer in regular numbers."
+        
 
-# Create your models here.
 
 class lemmmatizer(models.Model):
 	LATIN = 'latin'
@@ -35,7 +52,7 @@ class lemmmatizer(models.Model):
 
 	out_format = models.CharField(max_length = 5, choices=FORMAT_CHOICES, default=CSV)
     
-
+	question = models.CharField(max_length=15, default=romanMath())
 
     # i would think you would add something about the language here... 
     # later on if lemmatizer.language == 'latin': is asked   
