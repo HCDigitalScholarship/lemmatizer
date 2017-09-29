@@ -38,19 +38,17 @@
 	<div style="
     padding-left: 15px;
     padding-right: 15px;">  
-		<h1 id="PostBlock" style="display:inline-block;"> Lemmatizer </h1>
+		<h1 id="PostBlock" style="display:inline-block;"> Format Lemmatized Text </h1>
 			<br>
-			<p id="PostBlock">With this tool you can input a Greek or Latin text file. The lemmatizer will match the text with either the Bridge or Morpheus lemmata system and create a spreadsheet file in either csv or Excel (xlsx) format. To prove your <i>humanitas</i>, please answer the math question using Roman numerals.  </p>
+			<p id="PostBlock">Use this tool for format a lemmatized spreadsheet. To prove your <i>humanitas</i>, please answer the math question using Roman numerals.  </p>
 			
-			<form id="post_text" style="display:inline-block;" method="post" action="Lemmatizer" enctype="multipart/form-data">
+			<form id="formatlemmatizedtext" style="display:inline-block;" method="post" action="" enctype="multipart/form-data">
       		{% csrf_token %}
       		<div id="PostBlock" style="text-align:center;">
-      		
-      		{{ form.file }}
-      		{{ form.language }}
-      		{{ form.out_format }}
-      		{{ form.lem_format }}
-      		{{ form.question }}
+      		{{ cheese.file }}
+      		<p>Input {{ cheese.in_format }}</p>
+      		<p>Output {{ cheese.out_format }}</p>
+      		{{ cheese.question }}
 
       		<input type="submit" name="submit" value="Submit"> </div>
  		</form>

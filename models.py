@@ -2,19 +2,26 @@ from django.db import models
 from django.core.files.storage import FileSystemStorage
 import random
 
+marcas = (
+        ('chevrolet', 'Chevrolet'),
+        ('mazda', 'Mazda'),
+        ('nissan', 'Nissan'),
+        ('toyota', 'Toyota'),
+        ('mitsubishi', 'Mitsubishi'),)
+
 def romanMath():
     correct = False
     while (correct == False):
-        romanNum = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+        romanNum = ['0','I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
         length = len(romanNum)
         a = random.randint(1, length)
         b = random.randint(1, length)
         operation = random.randint(1, 2)
         if operation == 1: 
-            question = romanNum[a - 1] + " + " + romanNum[b- 1]+ " = "
+            question = romanNum[a] + " + " + romanNum[b]+ " = "
             answer = a + b
         elif operation == 2: 
-            question = romanNum[max(a, b) -1] + " - " + romanNum[min(a, b)- 1]+ " = "
+            question = romanNum[max(a, b)] + " - " + romanNum[min(a, b)]+ " = "
             answer = max(a, b) - min(a, b)
         return question 
         #print "Please solve the roman numeral math problem below, and give your answer in regular numbers."
@@ -55,4 +62,24 @@ class lemmmatizer(models.Model):
 	question = models.CharField(max_length=15, default=romanMath())
 
     # i would think you would add something about the language here... 
-    # later on if lemmatizer.language == 'latin': is asked   
+    # later on if lemmatizer.language == 'latin': is asked  
+class formatlemmatizedtext(models.Model):
+	
+	created_at = models.DateTimeField(auto_now_add=True)
+
+	file = models.FileField(blank=True, storage=FileSystemStorage(location='/tmp/format_temp_file.txt'))
+	
+	CSV = 'csv'
+	EXCEL = 'Excel'
+	FORMAT_CHOICES = ((CSV, 'csv'), (EXCEL, 'Excel'))
+
+	in_format = models.CharField(max_length = 5, choices=FORMAT_CHOICES, default=EXCEL)
+
+	CSV = 'csv'
+	EXCEL = 'Excel'
+	FORMAT_CHOICES = ((CSV, 'csv'), (EXCEL, 'Excel'))
+
+	out_format = models.CharField(max_length = 5, choices=FORMAT_CHOICES, default=CSV)
+    
+	question = models.CharField(max_length=17, default=romanMath())
+

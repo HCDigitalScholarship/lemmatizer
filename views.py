@@ -12,11 +12,14 @@ from django.template import Context, loader, RequestContext
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.files.base import ContentFile
 from utils import handle_uploaded_file
-from lemmatizer.forms import PostText, post_text
+from lemmatizer.forms import PostText, post_text, FormatFile
 from lemmatizer import easy_lem
 import tempfile
 from django.utils.encoding import smart_str
 import random 
+from openpyxl.workbook import Workbook
+from openpyxl.reader.excel import load_workbook, InvalidFileException
+
 
 #these three functions are part of the captcha that asks a simple math question using Roman numerals.
 def roman_solution(value):
@@ -33,7 +36,7 @@ def RomToReg(numeral):
     romanNum = ['0','I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII', 'XIII', 'XIV', 'XV', 'XVI','XVII','XVIII', "XIX", "XX"]
     for i in range(0, len(romanNum)):
             if numeral == romanNum[i]:
-                return i+1
+                return i
 
 def parseEquation(strInput):
     while " " in strInput:
@@ -100,7 +103,7 @@ def lemmatizer(request):
                 if out_format == 'Excel':
                 #Here we send the output file to lemmatized.html (tmpEDoVlX_Input.xlsx)
                     if lem_format == 'bridge':
-                        output_file = str(f.name).split('.')[0] + '_Input.xlsx'
+                        output_file = str(f.name).split('.')[0] + '.xlsx'
                         output_file = output_file.split('/')[2]
 
                     elif lem_format == 'morpheus':
@@ -109,7 +112,7 @@ def lemmatizer(request):
 
                 if out_format == 'csv':
                     if lem_format == 'bridge':
-                        output_file = str(f.name).split('.')[0] + '_Input.xlsx'
+                        output_file = str(f.name).split('.')[0] + '.xlsx'
                         wb = xlrd.open_workbook(output_file)
                         sheet_names = wb.sheet_names()
                         sh = wb.sheet_by_name(sheet_names[0])
@@ -162,4 +165,87 @@ def lemmatizer(request):
 
   #  return render(request, 'lemmatized.html', {'form': form,test:'hi4'})
  #   return render(request, 'lemmatize.html', {'form': form})
+def formatlemmatizedtext(request):
+
+    
+    if request.method == 'POST':
+        cheese = FormatFile(request.POST, request.FILES)
+        captcha = str(cheese['question'].value())
+        answer = parseEquation(captcha)
+        
+        print(answer)
+        print ('Hi, I got to line 174')
+
+        if answer != False: #cheese.is_valid() and
+            print ('Hi, I got to line 177')
+            
+            with tempfile.NamedTemporaryFile(dir='/tmp/', delete=False) as f:
+                f.write(cheese['file'].value().read())#.encode("utf-8"))
+                f.close
+                #TODO: Handle data from textfield
+                #f.write(form['text'].value().encode("utf-8"))
+                #with .read() gives'unicode' object has no attribute 'read'
+                #without gives 'ascii' codec can't encode character u'\u2014' in position 182: ordinal not in range(128)
+
+
+                #language, filename and format variables from form to pass to easy_lem
+
+                filename = f.name
+                print(filename)
+                f.close()
+
+                #TODO convert csv file to Excel sheet
+
+            with open(filename) as f:
+
+                f.read()
+                in_format = str(cheese['in_format'].value()) 
+                out_format = str(cheese['out_format'].value()) 
+
+                #pass variables to lemmatize function and Bret's scripts
+                print (filename,in_format,out_format)
+                easy_lem.format(filename)
+                print ('Hi, I got to line 203')
+
+                #uncomment to save form data to db
+                #form.save(commit=True)
+
+                if out_format == 'Excel':
+                #Here we send the output file to lemmatized.html (tmpEDoVlX_Input.xlsx)
+                    output_file = str(f.name).split('.')[0] + '_Input.xlsx'
+                    output_file = output_file.split('/')[2]
+
+                    
+                if out_format == 'csv':
+                    output_file = str(f.name).split('.')[0] + '_Input.xlsx'
+                    wb = xlrd.open_workbook(output_file)
+                    sheet_names = wb.sheet_names()
+                    sh = wb.sheet_by_name(sheet_names[0])
+                    your_csv_file = open('/tmp/formatted.csv', 'w')
+                    wr = csv.writer(your_csv_file, quoting=csv.QUOTE_ALL)
+                        
+                    for rownum in range(sh.nrows):
+                        try:
+                            wr.writerow(sh.row_values(rownum))
+                        except:
+                            pass
+                    your_csv_file.close()
+                    output_file = 'formatted.csv'
+
+
+                    
+                #Remove the tempary txt file, but keep the csv and xlsx output        
+                os.unlink(filename)
+                assert not os.path.exists(filename)
+
+            return render(request, 'formatted.html',{'cheese':cheese, 'output_file':output_file})#,{'test'='hi1'})
+        else:
+            print ('Hi, I got to line 238')
+            return render(request, 'format.html',{'cheese':cheese})#,{'test'='hi1'})
+    else:
+        print ('Hi, I got to line 242')
+
+        cheese = FormatFile()
+    return render(request, 'format.html',{'cheese':cheese}) # {'form': form, 'test':'hi2'})
+
 
