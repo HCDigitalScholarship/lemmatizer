@@ -179,9 +179,9 @@ def formatlemmatizedtext(request):
         if answer != False: #cheese.is_valid() and
             print ('Hi, I got to line 177')
             
-            with tempfile.NamedTemporaryFile(dir='/tmp/', delete=False) as f:
+            with tempfile.NamedTemporaryFile(suffix='.xlsx',dir='/tmp/', delete=False) as f:
                 f.write(cheese['file'].value().read())#.encode("utf-8"))
-                f.close
+                f.flush()
                 #TODO: Handle data from textfield
                 #f.write(form['text'].value().encode("utf-8"))
                 #with .read() gives'unicode' object has no attribute 'read'
@@ -192,18 +192,20 @@ def formatlemmatizedtext(request):
 
                 filename = f.name
                 print(filename)
+                
                 f.close()
 
-                #TODO convert csv file to Excel sheet
-
+                
             with open(filename) as f:
 
-                f.read()
+                ##
                 in_format = str(cheese['in_format'].value()) 
                 out_format = str(cheese['out_format'].value()) 
 
                 #pass variables to lemmatize function and Bret's scripts
                 print (filename,in_format,out_format)
+                #filename = filename + '.xlsx'
+
                 easy_lem.format(filename)
                 print ('Hi, I got to line 203')
 

@@ -52,15 +52,19 @@ class PostText(forms.ModelForm):
         file = forms.FileField(label='')
 
 class FormatFile(forms.Form):
-    OPTIONS = (
+    IN_OPTIONS = (
+            #("csv", "csv"),
+            ("Excel", "Excel"),
+            )
+    OUT_OPTIONS = (
             ("csv", "csv"),
             ("Excel", "Excel"),
             )
     file = forms.FileField()
     #question = forms.CharField(max_length=17, default=romanMath())
-    in_format = forms.MultipleChoiceField(widget=forms.Select,choices=OPTIONS)
+    in_format = forms.MultipleChoiceField(widget=forms.Select,choices=IN_OPTIONS)
     
-    out_format = forms.MultipleChoiceField(widget=forms.Select,choices=OPTIONS)
+    out_format = forms.MultipleChoiceField(widget=forms.Select,choices=OUT_OPTIONS)
     fun = romanMath()
     question = forms.CharField(initial=fun)
 
