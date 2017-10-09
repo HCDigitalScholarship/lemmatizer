@@ -61,8 +61,8 @@ import excel
 
 # https://pypi.python.org/pypi/regex
 # this is to recognize accented Greek characters as alphabetic
-import regex
-
+#import regex
+import re as regex
 # https://github.com/docopt/docopt
 from docopt import docopt
 
@@ -70,7 +70,7 @@ from docopt import docopt
 from openpyxl.utils import get_column_letter
 
 # http://docs.cltk.org/en/latest/latin.html#lemmatization
-from cltk.stem.lemma import LemmaReplacer 
+from lemma import LemmaReplacer 
 from cltk.stem.latin.j_v import JVReplacer
 from cltk.tokenize.word import WordTokenizer, nltk_tokenize_words
 
@@ -452,7 +452,7 @@ def autoLemma(args, *, lemmatizer=None, wordsFromPathList=wordsFromPathList):
             file paths
     """
     if lemmatizer is None:
-        lemmatizer = LemmaReplacer('latin' if args['latin'] else 'greek')#, include_ambiguous=args['--include-ambiguous'])
+        lemmatizer = LemmaReplacer('latin' if args['latin'] else 'greek', include_ambiguous=args['--include-ambiguous'])
     # Find name of text
     if args['--output']:
         text_name, text_extension = splitext(args['--output'])

@@ -1,14 +1,19 @@
 import os
 import subprocess
 path = os.path.dirname(os.path.realpath(__file__))
+import sys 
 
-def lemmatize(language,filename,format):
+def lemmatize(language,filename,format,lem_level):
     try: 
         
-        
+        if lem_level == 'Ambiguous':
+            key = '-a'
+        else:
+            key = '' 
         #subprocess.call('python3 /srv/bridge-repo/lemmatizer/autoLemma.py {0} {1}'.format(language, filename), shell=False)
-
-        os.system('python3 /srv/bridge-repo/lemmatizer/autoLemma.py {0} {1}'.format(language, filename))   
+        #os.system('pip3 install cltk')
+        print(sys.path)
+        os.system('python3 /srv/bridge-repo/lemmatizer/autoLemma.py {0} {1} {2}'.format(language, key, filename))   
     
         #convert lemma format to Bridge
         #if language == 'latin':

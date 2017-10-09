@@ -91,11 +91,12 @@ def lemmatizer(request):
 
                 f.read()
                 lem_format = str(form['lem_format'].value()) 
-                out_format = str(form['out_format'].value()) 
+                out_format = str(form['out_format'].value())
+                lem_level = str(form['lem_level'].value()) 
 
                 #pass variables to lemmatize function and Bret's scripts
-                print (language,filename,lem_format)
-                easy_lem.lemmatize(language,filename,lem_format)
+                print (language,filename,lem_format,lem_level)
+                easy_lem.lemmatize(language,filename,lem_format,lem_level)
 
                 #uncomment to save form data to db
                 #form.save(commit=True)
