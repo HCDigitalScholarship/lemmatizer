@@ -2,28 +2,26 @@ from django.db import models
 from django.core.files.storage import FileSystemStorage
 import random
 
-marcas = (
-        ('chevrolet', 'Chevrolet'),
-        ('mazda', 'Mazda'),
-        ('nissan', 'Nissan'),
-        ('toyota', 'Toyota'),
-        ('mitsubishi', 'Mitsubishi'),)
 
 def romanMath():
-    correct = False
-    while (correct == False):
-        romanNum = ['0','I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
-        length = len(romanNum)
-        a = random.randint(1, length)
-        b = random.randint(1, length)
-        operation = random.randint(1, 2)
-        if operation == 1: 
-            question = romanNum[a] + " + " + romanNum[b]+ " = "
-            answer = a + b
-        elif operation == 2: 
-            question = romanNum[max(a, b)] + " - " + romanNum[min(a, b)]+ " = "
-            answer = max(a, b) - min(a, b)
-        return question 
+    try:
+        correct = False
+        while (correct == False):
+            romanNum = ['0','I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+            length = len(romanNum)
+            a = random.randint(1, length)
+            b = random.randint(1, length)
+            operation = random.randint(1, 2)
+            if operation == 1: 
+                question = romanNum[a] + " + " + romanNum[b]+ " = "
+                answer = a + b
+            elif operation == 2: 
+                question = romanNum[max(a, b)] + " - " + romanNum[min(a, b)]+ " = "
+                answer = max(a, b) - min(a, b)
+            return question
+    except:
+        question = 'I + I = II'
+        return question  
         #print "Please solve the roman numeral math problem below, and give your answer in regular numbers."
         
 
@@ -41,23 +39,23 @@ class lemmmatizer(models.Model):
 	
 	text = models.TextField(default='', blank=True)
 
-	ALL = 'all'
-	ONLY_UN = 'oun'
-	LEVEL_CHOICES = ((ALL,'Lemmatize All Forms'),(ONLY_UN,'Only Unambiguous Forms'))
-
-	lem_level = models.CharField(max_length = 22, choices=LEVEL_CHOICES, default=ALL)
-
 	BRIDGE = 'bridge'
 	MORPHEUS = 'morpheus'
 	FORMAT_CHOICES = ((BRIDGE, 'Bridge'), (MORPHEUS, 'Morpheus'))
 
 	lem_format = models.CharField(max_length = 8, choices=FORMAT_CHOICES, default=BRIDGE)
 
+	AMBIGUOUS = 'Ambiguous'
+	UNAMBIGUOUS = 'Unambiguous'
+	FORMAT_CHOICES = ((AMBIGUOUS, 'Ambiguous'), (UNAMBIGUOUS, 'Unambiguous'))
+
+	lem_level = models.CharField(max_length = 11, choices=FORMAT_CHOICES, default=AMBIGUOUS)
+
 	CSV = 'csv'
 	EXCEL = 'Excel'
 	FORMAT_CHOICES = ((CSV, 'csv'), (EXCEL, 'Excel'))
 
-	out_format = models.CharField(max_length = 5, choices=FORMAT_CHOICES, default=CSV)
+	out_format = models.CharField(max_length = 5, choices=FORMAT_CHOICES, default=EXCEL)
     
 	question = models.CharField(max_length=15, default=romanMath())
 
