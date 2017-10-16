@@ -10,10 +10,14 @@ def lemmatize(language,filename,format,lem_level):
             key = '-a'
         else:
             key = '' 
+        if format == 'bridge':
+            ui = '--force-ui'
+        else:
+            ui = ''
         #subprocess.call('python3 /srv/bridge-repo/lemmatizer/autoLemma.py {0} {1}'.format(language, filename), shell=False)
         #os.system('pip3 install cltk')
         print(sys.path)
-        os.system('python3 /srv/bridge-repo/lemmatizer/autoLemma.py {0} --force-no-punctuation --force-ui {1} {2}'.format(language, key, filename))   
+        os.system('python3 /srv/bridge-repo/lemmatizer/autoLemma.py {0} --force-no-punctuation {1} {2} {3}'.format(language,ui, key, filename))   
     
         #convert lemma format to Bridge
         #if language == 'latin':
